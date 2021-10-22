@@ -2,6 +2,8 @@
 
 https://leetcode.com/problems/two-sum/
 
+Level: Easy
+
 ## Solution 1
 
 ### Brute Force
