@@ -16,10 +16,10 @@
       i++;
   }
   
-  while (s[i] >= '0' && s[i] <= '9') {
+  while (/^\+?\d+$/.test(s[i])) {
       res = (res * 10) + (s[i] - 0);
       if (sign === 1 && res > INT_MAX) return INT_MAX;
-      if (sign === -1 && res > INT_MAX + 1) return INT_MIN;
+      if (sign === -1 && res > INT_MAX) return INT_MIN;
       i++;
   }
   
