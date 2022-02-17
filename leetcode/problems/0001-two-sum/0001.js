@@ -31,3 +31,20 @@
     map.set(nums[i], i);
   }
 };
+
+/**
+ * Using object
+ * 
+ * Runtime: 68 ms
+ * Memory Usage: 43.6 MB
+ */
+ var twoSum = function(nums, target) {
+  const map = {};
+  for (let i = 0; i < nums.length; i++) {
+    const diff = target - nums[i];
+    if (map[`${nums[i]}`] !== undefined) {
+      return [map[`${nums[i]}`], i];
+    }
+    map[`${diff}`] = i;
+  }
+};
