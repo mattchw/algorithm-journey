@@ -24,7 +24,8 @@ function reverseStringExceptFirstAndLast(input) {
   inputs.shift();
 
   for (let i = 0; i < inputs.length; i++) {
-    let words = inputs[i].split(' ');
+    let words = inputs[i].trim().split(' ');
+    console.log(words)
     if (words.length > 3) {
       let firstWord = words[0];
       let lastWord = words[words.length - 1];
@@ -39,7 +40,7 @@ function reverseStringExceptFirstAndLast(input) {
 }
 
 let input = `6
-Hello
+Hello       
 Hello World
 Hello My World
 Hello is my world
