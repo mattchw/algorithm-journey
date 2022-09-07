@@ -10,5 +10,8 @@ reverse('Greetings!') === '!sgniteerG'
 """
 
 
-def reverse(string):
-    return string[::-1]
+def reverseStr(string):
+    return "".join(reversed(string))
+
+
+print(reverseStr("apple"))  # 'leppa'
