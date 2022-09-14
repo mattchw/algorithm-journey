@@ -8,6 +8,3 @@ def pyramid(n):
             else:
                 str += " "
         print(str)
-
-
-pyramid(5)
