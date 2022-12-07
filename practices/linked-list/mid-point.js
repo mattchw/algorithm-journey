@@ -18,8 +18,8 @@
  */
 
 function midpoint(list) {
-  const slow = list.getFirst();
-  const fast = list.getFirst();
+  let slow = list.getFirst();
+  let fast = list.getFirst();
 
   while (fast.next && fast.next.next) {
     slow = slow.next;
