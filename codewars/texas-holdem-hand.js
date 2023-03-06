@@ -53,10 +53,10 @@ function checkPair(arr) {
   };
 }
 function checkTwoPair(arr) {
-  const pairs = arr.filter((e, i, a) => a.findIndex(e2 => e2.value === e.value) !== i);
+  const pairs = arr.sort((a, b) => b.value - a.value).filter((e, i, a) => a.findIndex(e2 => e2.value === e.value) !== i);
   if (pairs.length < 2) return false;
   const pair1 = pairs[0];
-  const pair2 = pairs.find(e => e.value !== pair1.value);
+  const pair2 = pairs[1];
   return {
     type: 'two pair',
     ranks: [pair1.value, pair2.value, ...arr.filter(e => e.value !== pair1.value && e.value !== pair2.value).map(e => e.value).sort((a, b) => b - a).slice(0, 1)].map(e => valuesToFaceCards[e])
@@ -72,26 +72,27 @@ function checkThreeOfAKind(arr) {
   };
 }
 function checkStraight(arr) {
-  console.log(arr.map(e => e.value))
-  const values = arr.map(e => e.value).sort((a, b) => a - b);
-  console.log(values)
+  const values = [... new Set(arr.map(e => e.value).sort((a, b) => b - a))]
   for (let i = 0; i < values.length - 4; i++) {
-    if (values[i] + 1 === values[i + 1] && values[i] + 2 === values[i + 2] && values[i] + 3 === values[i + 3] && values[i] + 4 === values[i + 4]) {
+    if (values[i] - 1 === values[i + 1] && values[i + 1] - 1 === values[i + 2] && values[i + 2] - 1 === values[i + 3] && values[i + 3] - 1 === values[i + 4]) {
       return {
         type: 'straight',
-        ranks: [values[i + 4], values[i + 3], values[i + 2], values[i + 1], values[i]].map(e => valuesToFaceCards[e])
+        ranks: [values[i], values[i + 1], values[i + 2], values[i + 3], values[i + 4]].map(e => valuesToFaceCards[e])
       };
     }
   }
   return false;
 }
 function checkFlush(arr) {
-  const suits = arr.map(e => e.suit);
-  if (suits.filter(e => e === suits[0]).length < 5) return false;
-  return {
-    type: 'flush',
-    ranks: arr.map(e => e.value).sort((a, b) => b - a).slice(0, 5).map(e => valuesToFaceCards[e])
-  };
+  for (let suit of ['♠', '♣', '♥', '♦']) {
+    const flush = arr.filter(e => e.suit === suit);
+    if (flush.length >= 5) {
+      return {
+        type: 'flush',
+        ranks: flush.map(e => e.value).sort((a, b) => b - a).slice(0, 5).map(e => valuesToFaceCards[e])
+      };
+    }
+  }
 }
 function checkFullHouse(arr) {
   const threes = arr.filter((e, i, a) => a.findIndex(e2 => e2.value === e.value) === i && a.filter(e2 => e2.value === e.value).length === 3);
@@ -114,14 +115,18 @@ function checkFourIfAKind(arr) {
   };
 }
 function checkStraightFlush(arr) {
-  const values = arr.map(e => e.value).sort((a, b) => a - b);
-  const suits = arr.map(e => e.suit);
-  for (let i = 0; i < values.length - 4; i++) {
-    if (values[i] + 1 === values[i + 1] && values[i] + 2 === values[i + 2] && values[i] + 3 === values[i + 3] && values[i] + 4 === values[i + 4]) {
-      if (suits.filter(e => e === suits[i]).length >= 5) {
+  const suits = {};
+  for (let card of arr) {
+    if (!suits[card.suit]) suits[card.suit] = [];
+    suits[card.suit].push(card);
+  }
+  for (let suit of Object.keys(suits)) {
+    const values = [... new Set(suits[suit].map(e => e.value).sort((a, b) => b - a))]
+    for (let i = 0; i < values.length - 4; i++) {
+      if (values[i] - 1 === values[i + 1] && values[i + 1] - 1 === values[i + 2] && values[i + 2] - 1 === values[i + 3] && values[i + 3] - 1 === values[i + 4]) {
         return {
           type: 'straight-flush',
-          ranks: [values[i + 4], values[i + 3], values[i + 2], values[i + 1], values[i]].map(e => valuesToFaceCards[e])
+          ranks: [values[i], values[i + 1], values[i + 2], values[i + 3], values[i + 4]].map(e => valuesToFaceCards[e])
         };
       }
     }
