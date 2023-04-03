@@ -18,7 +18,6 @@ var isValidSudoku = function (board) {
     for (let j = 0; j < 9; j++) {
       const num = board[i][j];
       if (num === '.') continue;
-      console.log(i, j, num, rows[i], cols[j], boxes[Math.floor(i / 3) * 3 + Math.floor(j / 3)])
 
       if (rows[i].includes(num) || cols[j].includes(num) || boxes[Math.floor(i / 3) * 3 + Math.floor(j / 3)].includes(num)) {
         return false;
